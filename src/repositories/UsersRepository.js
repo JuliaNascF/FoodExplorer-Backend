@@ -17,6 +17,14 @@ class UserRepository {
 
     return { id: result.rows[0].id };
   }
+  async update({ id, name, email, password }) {
+    const query = {
+      text: `UPDATE users SET name = $1, email = $2, password = $3, updated_at = CURRENT_TIMESTAMP WHERE id = $4`,
+      values: [name, email, password, id],
+    };
+
+    await db.query(query);
+  }
 }
 
 module.exports = UserRepository;
