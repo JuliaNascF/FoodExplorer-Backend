@@ -1,5 +1,5 @@
-import pg from "pg";
-import dotenv from "dotenv";
+const pg = require("pg");
+const dotenv=require("dotenv");
 
 dotenv.config();
 
@@ -9,4 +9,6 @@ const configDatabase = {
     connectionString:process.env.DATABASE_URL
 }
 
- export const db = new Pool(configDatabase);
+ const db = new Pool(configDatabase);
+
+ module.exports =db;
