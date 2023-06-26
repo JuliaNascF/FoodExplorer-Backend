@@ -1,29 +1,23 @@
-const db = require("../database/database.connection");
+const knex = require('../database/knex/index');
 
 class UserRepository {
   async findByEmail(email) {
-    const user = await db.query("SELECT * FROM users WHERE email = $1", [email]);
-
-    return user.rows[0];
+    const user = await knex('users').where('email', email).first();
+    return user;
   }
 
   async create({ name, email, password }) {
-    const query = {
-      text: "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING id",
-      values: [name, email, password],
-    };
+    const [createdUser] = await knex('users')
+      .insert({ name, email, password })
+      .returning('id');
 
-    const result = await db.query(query);
-
-    return { id: result.rows[0].id };
+    return { id: createdUser };
   }
-  async update({ id, name, email, password }) {
-    const query = {
-      text: `UPDATE users SET name = $1, email = $2, password = $3, updated_at = CURRENT_TIMESTAMP WHERE id = $4`,
-      values: [name, email, password, id],
-    };
 
-    await db.query(query);
+  async update({ id, name, email, password }) {
+    await knex('users')
+      .where('id', id)
+      .update({ name, email, password, updated_at: knex.fn.now() });
   }
 }
 
