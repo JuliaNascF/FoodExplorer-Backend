@@ -1,13 +1,12 @@
 const knex = require("../database/knex");
 const AppError = require('../utils/AppError');
-
+const aws = require('aws-sdk');
 
 class DishesController {
     async create(request, response) {
         try {
             const { name, category, description, ingredients, price } = request.body;
             const image = request.file.key;
-
 
             const existingDish = await knex('dishes').where('name', name).first();
             if (existingDish) {
@@ -26,10 +25,6 @@ class DishesController {
 
             const dishId = dishResult.id;
 
-            console.log('dishId:', dishId);
-
-
-
             const ingredientsArray = Array.isArray(ingredients) ? ingredients : [ingredients];
 
             await knex('ingredients').insert(
@@ -39,9 +34,6 @@ class DishesController {
                 }))
             );
 
-
-
-            // Retornar uma resposta de status 201 (criado) sem dados no corpo
             return response.sendStatus(201);
         } catch (error) {
             console.error('Erro ao criar o prato:', error);
@@ -49,60 +41,57 @@ class DishesController {
         }
     }
 
-
-
     async update(request, response) {
-        const { name, description, category, price, ingredients, image } = request.body;
+        const { name, description, category, price, ingredients } = request.body;
         const { id } = request.params;
-        const imageFileName = request.file.filename;
+        const image = request.file.key;
+    
+        try {
+          const dish = await knex('dishes').where({ id }).first();
 
+          const oldImage = dish.image;
 
-        const diskStorage = new DiskStorage();
-
-        const dish = await knex("dishes").where({ id }).first();
-
-        if (dish.image) {
-            await diskStorage.deleteFile(dish.image);
-        }
-
-        const filename = await diskStorage.saveFile(imageFileName);
-
-
-        dish.image = image ?? filename;
-        dish.title = title ?? dish.title;
-        dish.description = description ?? dish.description;
-        dish.category = category ?? dish.category;
-        dish.price = price ?? dish.price;
-
-
-        await knex("dishes").where({ id }).update(dish);
-
-
-        const hasOnlyOneIngredient = typeof (ingredients) === "string";
-
-        let ingredientsInsert
-
-        if (hasOnlyOneIngredient) {
-            ingredientsInsert = {
-                name: ingredients,
-                dish_id: dish.id,
+          if (oldImage) {
+            try {
+              const s3 = new aws.S3();
+              const params = {
+                Bucket: 'usuariofood',
+                Key: oldImage
+              };
+              await s3.deleteObject(params).promise();
+              console.log('Imagem antiga excluída com sucesso');
+            } catch (error) {
+              console.error('Erro ao excluir a imagem antiga:', error);
             }
+          }
 
-        } else if (ingredients.length > 1) {
-            ingredientsInsert = ingredients.map(ingredient => {
-                return {
-                    dish_id: dish.id,
-                    name: ingredient
-                }
-            });
+          dish.name = name ?? dish.name;
+          dish.description = description ?? dish.description;
+          dish.category = category ?? dish.category;
+          dish.price = price ?? dish.price;
+          dish.image = image ?? dish.image
+    
+          await knex('dishes').where({ id }).update(dish);
+    
+          await knex('ingredients').where({ dish_id: id }).delete();
+    
+          const ingredientsInsert = Array.isArray(ingredients) ?
+            ingredients.map((ingredient) => ({
+              dish_id: id,
+              name: ingredient
+            })) :
+            [{ dish_id: id, name: ingredients }];
+    
+          await knex('ingredients').insert(ingredientsInsert);
+    
+          return response.status(200).json('Prato atualizado com sucesso');
+
+        } catch (error) {
+          console.error('Erro ao atualizar o prato:', error);
+          return response.status(500).json({ error: 'Erro ao atualizar o prato.' });
         }
-
-        await knex("ingredients").where({ dish_id: id }).delete()
-        await knex("ingredients").where({ dish_id: id }).insert(ingredientsInsert)
-
-        return response.status(201).json('Prato atualizado com sucesso')
-    }
-
+      }
+    
     async show(request, response) {
         const { id } = request.params;
         const dish = await knex("dishes").where({ id }).first();
