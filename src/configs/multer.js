@@ -6,13 +6,7 @@ const multerS3 = require("multer-s3");
 const aws = require("aws-sdk");
 require('aws-sdk/lib/maintenance_mode_message').suppress = true;
 
-aws.config.update({
-  region: 'sa-east-1',
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  }
-});
+
 const storageTypes = {
   local: multer.diskStorage({
     destination: (req, file, cb) => {
