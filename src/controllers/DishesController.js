@@ -6,7 +6,7 @@ class DishesController {
   async create(request, response) {
     try {
       const { name, category, description, ingredients, price } = request.body;
-      const image = request.file.key;
+      const image = request.file.location;
 
       const dishData = {
         name,
@@ -18,6 +18,7 @@ class DishesController {
       };
 
       await dishesService.create(dishData);
+   
 
       return response.sendStatus(201);
     } catch (error) {
@@ -77,17 +78,15 @@ class DishesController {
   }
 
   async index(request, response) {
-    const { name, ingredients } = request.body;
-
     try {
-      const dishes = await dishesService.index({ name, ingredients });
-
+      const dishes = await dishesService.index();
       return response.status(200).json(dishes);
     } catch (error) {
       console.error('Erro ao buscar os pratos:', error);
       return response.status(500).json({ error: 'Erro ao buscar os pratos.' });
     }
   }
+  
 }
 
 module.exports = DishesController;

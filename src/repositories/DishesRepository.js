@@ -126,54 +126,16 @@ class DishesRepository {
       }
     }
   
-    async index({ name, ingredients }) {
+    async index() {
       try {
-        let dishes;
-  
-        if (ingredients && typeof ingredients === 'string') {
-          const filterIngredients = ingredients.split(',').map((ingredient) => ingredient.trim());
-  
-          dishes = await knex('dishes')
-            .select([
-              'dishes.id',
-              'dishes.name',
-              'dishes.description',
-              'dishes.category',
-              'dishes.price',
-              'dishes.image',
-            ])
-            .whereIn('id', function () {
-              this.select('dish_id')
-                .from('ingredients')
-                .whereIn('name', filterIngredients)
-                .groupBy('dish_id')
-                .havingRaw('COUNT(*) = ?', filterIngredients.length);
-            })
-            .where('dishes.name', 'like', `%${name}%`)
-            .orderBy('dishes.name');
-        } else {
-          dishes = await knex('dishes').where('name', 'like', `%${name}%`).orderBy('name');
-        }
-  
-        const dishIds = dishes.map((dish) => dish.id);
-  
-        const ingredientsQuery = await knex('ingredients')
-          .select('dish_id', 'name')
-          .whereIn('dish_id', dishIds);
-  
-        const dishesWithIngredients = dishes.map((dish) => ({
-          ...dish,
-          ingredients: ingredientsQuery
-            .filter((ingredient) => ingredient.dish_id === dish.id)
-            .map((ingredient) => ingredient.name),
-        }));
-  
-        return dishesWithIngredients;
+        const dishes = await knex('dishes').orderBy('name');
+        return dishes;
       } catch (error) {
         console.error('Erro ao buscar os pratos:', error);
         throw new Error('Erro ao buscar os pratos.');
       }
     }
+    
   }
   
   module.exports = DishesRepository;

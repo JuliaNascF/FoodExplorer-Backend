@@ -57,15 +57,16 @@ class DishesService {
     }
   }
 
-  async index({ name, ingredients }) {
+  async index() {
     try {
-      const dishes = await this.dishesRepository.index({ name, ingredients });
+      const dishes = await this.dishesRepository.index();
       return dishes;
     } catch (error) {
       console.error('Erro ao buscar os pratos:', error);
       throw new Error('Erro ao buscar os pratos.');
     }
   }
+  
 
   async deleteImageFromS3(imageKey) {
     const params = {
