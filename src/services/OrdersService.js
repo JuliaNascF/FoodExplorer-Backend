@@ -21,7 +21,7 @@ class OrdersService {
       throw new Error('Internal server error');
     }
   }
-
+  
   async updateOrderStatus(orderId, orderStatus) {
     try {
       await ordersRepository.updateOrderStatus(orderId, orderStatus);

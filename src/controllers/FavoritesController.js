@@ -19,7 +19,7 @@ class FavoriteController {
   async addToFavorites(req, res) {
     const userId = req.user.id;
     const dishId = req.params.id;
-    console.log(userId);
+    
     try {
       const existingFavorite = await knex('favorites')
         .where({ userId, dish_id: dishId })
