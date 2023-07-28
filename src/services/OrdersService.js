@@ -1,14 +1,16 @@
 const ordersRepository = require("../repositories/OrdersRepository");
 
 class OrdersService {
-  async createOrder(orderStatus, total_amount, payment_method, userId) {
+  async createOrder(orderStatus, total_amount, payment_method, userId, items) {
     try {
-      const orderId = await ordersRepository.create(orderStatus, total_amount, payment_method, userId);
+      const orderId = await ordersRepository.create(orderStatus, total_amount, payment_method, userId, items);
       return orderId;
     } catch (error) {
       throw new Error('Internal server error');
     }
   }
+
+  
 
   async getOrdersByUserId(userId, isAdmin) {
     try {

@@ -1,18 +1,24 @@
-
 const ordersService = require("../services/OrdersService");
 
 class OrdersController {
   async create(request, response) {
-    const { orderStatus, total_amount, payment_method } = request.body;
+    const { orderStatus, total_amount, payment_method, items } = request.body;
     const userId = request.user.id;
-
+  
     try {
-      const orderId = await ordersService.createOrder(orderStatus, total_amount, payment_method, userId);
+      const orderId = await ordersService.createOrder(
+        orderStatus,
+        total_amount,
+        payment_method,
+        userId,
+        items 
+      );
       return response.status(201).json(orderId);
     } catch (error) {
       return response.status(500).json({ error: error.message });
     }
   }
+  
 
   async index(request, response) {
     const userId = request.user.id;
@@ -38,4 +44,3 @@ class OrdersController {
   }
 }
 module.exports =  OrdersController;
-

@@ -4,35 +4,51 @@ class CartController {
   async addToCart(req, res) {
     const userId = req.user.id;
     const dishId = req.params.id;
+    const quantity = req.body.quantity || 1; 
 
     try {
-      // Verifica se o usuário existe
       const user = await knex('users').where('id', userId).first();
       if (!user) return res.status(404).send("Usuário não encontrado");
 
-      // Verifica se o prato (dish) existe
       const dish = await knex('dishes').where('id', dishId).first();
       if (!dish) return res.status(404).send("Prato não encontrado");
 
-      // Verifica se o prato já está no carrinho do usuário
+    
       const cartItem = await knex('orderItem')
         .where('user_id', userId)
         .where('dish_id', dishId)
         .first();
 
       if (cartItem) {
-    
-        // Atualiza a quantidade do item no carrinho
-        await knex('orderItem')
-          .where('user_id', userId)
-          .where('dish_id', dishId)
-          .increment('quantity', 1);
+        
+        return res.status(400).send("O prato já está no carrinho do usuário");
+        
       } else {
         // Adiciona o prato ao carrinho do usuário
-        await knex('orderItem').insert({ user_id: userId, dish_id: dishId, quantity: 1 });
+        await knex('orderItem').insert({ user_id: userId, dish_id: dishId, quantity});
       }
 
       res.status(200).json({ dish });
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
+  }
+
+  async checkIfInCart(req, res) {
+    const userId = req.user.id;
+    const dishId = req.params.id;
+
+    try {
+     
+      const user = await knex('users').where('id', userId).first();
+      if (!user) return res.status(404).send("Usuário não encontrado");
+
+      const cartItem = await knex('orderItem')
+        .where('user_id', userId)
+        .where('dish_id', dishId)
+        .first();
+
+      res.status(200).json({ isInCart: !!cartItem });
     } catch (err) {
       res.status(500).send(err.message);
     }

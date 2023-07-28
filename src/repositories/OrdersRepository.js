@@ -1,12 +1,14 @@
 const db = require("../database/database.connection");
 
 class OrdersRepository {
-  async create(orderStatus, total_amount, payment_method, userId) {
-    const query = 'INSERT INTO orders (orderStatus, total_amount, payment_method, userId) VALUES ($1, $2, $3, $4) RETURNING id';
-    const values = [orderStatus, total_amount, payment_method, userId];
+  async create(orderStatus, total_amount, payment_method, userId, items) {
+    const query = 'INSERT INTO orders (orderStatus, total_amount, payment_method, userId, items) VALUES ($1, $2, $3, $4, $5) RETURNING id';
+    const values = [orderStatus, total_amount, payment_method, userId, items];
     const result = await db.query(query, values);
     return result.rows[0].id;
   }
+
+  
 
   async findAllByUserId(userId) {
     const query = 'SELECT * FROM orders WHERE userId = $1';

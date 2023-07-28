@@ -29,7 +29,6 @@ class FavoriteController {
         return res.status(409).send("Esse prato já está nos favoritos!");
       }
 
-      // Adiciona o prato aos favoritos do usuário
       await knex('favorites').insert({ userId, dish_id: dishId });
 
       res.status(200).send("Prato adicionado aos favoritos com sucesso!");
@@ -51,7 +50,6 @@ class FavoriteController {
         return res.status(404).send("Prato não encontrado nos favoritos!");
       }
 
-      // Remove o prato dos favoritos do usuário
       await knex('favorites')
         .where({ userId, dish_id: dishId })
         .del();
