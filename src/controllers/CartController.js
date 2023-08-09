@@ -120,6 +120,21 @@ class CartController {
     }
   }
 
+  async clearCart(req, res) {
+    const userId = req.user.id;
+
+    try {
+      const user = await knex('users').where('id', userId).first();
+      if (!user) return res.status(404).send("Usuário não encontrado");
+
+      await knex('orderItem').where('user_id', userId).del();
+
+      res.sendStatus(200);
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
+  }
+
   async getCart(req, res) {
     const userId = req.user.id;
 

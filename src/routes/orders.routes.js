@@ -9,9 +9,9 @@ const ordersRoutes = Router();
 
 ordersRoutes.use(ensureAuthenticated);
 
-
 ordersRoutes.post("/", ordersController.create);
 ordersRoutes.get("/", ordersController.index);
+ordersRoutes.get("/all", ensureIsAdmin, ordersController.getAllOrders);
 ordersRoutes.put("/", ensureIsAdmin, ordersController.update);
 
 

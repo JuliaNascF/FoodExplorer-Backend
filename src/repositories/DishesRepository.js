@@ -1,6 +1,10 @@
 const knex = require("../database/knex");
+const aws = require('aws-sdk');
 
 class DishesRepository {
+  constructor() {
+    this.s3 = new aws.S3();
+  }
     async create(dishData) {
       try {
         const [dishResult] = await knex('dishes')
@@ -49,7 +53,7 @@ class DishesRepository {
   
         if (oldImage) {
           try {
-            await deleteImageFromS3(oldImage);
+            await this.deleteImageFromS3(oldImage);
             console.log('Imagem antiga excluída com sucesso');
           } catch (error) {
             console.error('Erro ao excluir a imagem antiga:', error);
@@ -116,7 +120,7 @@ class DishesRepository {
         await knex('dishes').where({ id }).delete();
   
         if (imageKey) {
-          await deleteImageFromS3(imageKey);
+          await this.deleteImageFromS3(imageKey);
         }
   
         return 'Prato excluído com sucesso';
@@ -126,6 +130,14 @@ class DishesRepository {
       }
     }
   
+    async deleteImageFromS3(imageKey) {
+      const params = {
+        Bucket: 'usuariofood',
+        Key: imageKey,
+      };
+      await this.s3.deleteObject(params).promise();
+    }
+
     async index() {
       try {
         const dishes = await knex('dishes').orderBy('name');

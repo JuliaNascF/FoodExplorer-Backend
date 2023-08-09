@@ -10,7 +10,15 @@ class OrdersService {
     }
   }
 
-  
+  async getAllOrders() {
+    try {
+      
+        return ordersRepository.findAll();
+      
+    } catch (error) {
+      throw new Error('Internal server error');
+    }
+  }
 
   async getOrdersByUserId(userId, isAdmin) {
     try {

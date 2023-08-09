@@ -2,8 +2,6 @@
 const DishesRepository = require('../repositories/DishesRepository');
 const aws = require('aws-sdk');
 
-
-
 class DishesService {
   constructor() {
     this.dishesRepository = new DishesRepository();
@@ -27,7 +25,10 @@ class DishesService {
     }
   }
 
+
+  
   async update(id, dishData) {
+
     try {
       await this.dishesRepository.update(id, dishData);
       return 'Prato atualizado com sucesso';
@@ -56,7 +57,8 @@ class DishesService {
       throw new Error('Erro ao excluir o prato.');
     }
   }
-
+  
+ 
   async index() {
     try {
       const dishes = await this.dishesRepository.index();
@@ -67,14 +69,6 @@ class DishesService {
     }
   }
   
-
-  async deleteImageFromS3(imageKey) {
-    const params = {
-      Bucket: 'usuariofood',
-      Key: imageKey,
-    };
-    await this.s3.deleteObject(params).promise();
-  }
 }
 
 module.exports = new DishesService();

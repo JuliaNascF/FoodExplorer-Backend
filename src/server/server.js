@@ -1,10 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-require("express-async-errors")
-
+require("express-async-errors");
+const dotenv = require("dotenv");
 const AppError= require("../utils/AppError");
-const routes = require("../routes/index")
+const routes = require("../routes/index");
 
 function connectServer(){
   const app = express();
@@ -35,7 +35,7 @@ function connectServer(){
   });
     
     
-    const PORT = 4000
+    const PORT = process.env.PORT || 4000
     app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`))
    
   };

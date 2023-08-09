@@ -11,6 +11,7 @@ cartRouter.get('/check/:id', ensureAuthenticated, cartController.checkIfInCart)
 cartRouter.post("/decrease/:id", ensureAuthenticated, cartController.decreaseQuantity);
 cartRouter.get("/", ensureAuthenticated, cartController.getCart);
 cartRouter.delete('/:id',ensureAuthenticated, cartController.removeFromCart);
+cartRouter.delete('/', ensureAuthenticated, cartController.clearCart);
 
 
-module.exports =cartRouter;
+module.exports=cartRouter;

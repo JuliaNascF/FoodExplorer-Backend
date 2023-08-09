@@ -19,6 +19,15 @@ class OrdersController {
     }
   }
   
+  async getAllOrders(request, response) {
+
+    try {
+      const orders = await ordersService.getAllOrders();
+      return response.status(200).json(orders);
+    } catch (error) {
+      return response.status(500).json({ error: error.message });
+    }
+  }
 
   async index(request, response) {
     const userId = request.user.id;

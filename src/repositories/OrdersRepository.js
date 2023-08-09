@@ -8,7 +8,11 @@ class OrdersRepository {
     return result.rows[0].id;
   }
 
-  
+  async findAll() {
+    const query = 'SELECT * FROM orders';
+    const result = await db.query(query);
+    return result.rows;
+  }
 
   async findAllByUserId(userId) {
     const query = 'SELECT * FROM orders WHERE userId = $1';
