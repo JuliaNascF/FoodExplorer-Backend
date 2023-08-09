@@ -6,7 +6,8 @@ module.exports = {
     connection: {
       database: 'ejvllvtg',
       user: 'ejvllvtg',
-      password: 'IufuDDWLzmVMtc0kxXj2OuqsfA_2QQ8z'
+      password: 'IufuDDWLzmVMtc0kxXj2OuqsfA_2QQ8z',
+      host: 'batyr.db.elephantsql.com',
     },
     pool: {
       min: 2,
