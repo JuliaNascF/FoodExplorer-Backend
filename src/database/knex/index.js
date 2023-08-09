@@ -1,4 +1,4 @@
-const knexfile = require("../../../knexfile.js");
+const knexfile = require("../../../knexfile");
 const knex = require("knex");
 const dotenv=require("dotenv");
 
