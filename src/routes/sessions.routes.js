@@ -2,7 +2,7 @@ const { Router } = require("express");
 
 const SessionsController = require("../controllers/SessionsController");
 const sessionsController = new SessionsController();
-const userSchema = require("../schemas/auth.schemas.js");
+const {userSchema} = require("../schemas/auth.schemas.js");
 
 const sessionsRoutes = Router();
 
