@@ -24,11 +24,11 @@ O usuário irá visualizar todos os pratos cadastrados e, quando clicar em um pr
 1. Clone este repositório para o seu computador:
 
 ```bash
-git clone https://github.com/seu-usuario/sua-api.git
+git clone https://github.com/JuliaNascF/FoodExplorer-Backend.git
 ```
 2. Navegue até o diretório do projeto:
  ```bash
-cd sua-api
+cd FoodExplorer-Backend
 ```
 3. Crie um banco de dados no PostgreSQL
 4. Configure as variáveis de ambiente necessárias.
