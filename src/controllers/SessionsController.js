@@ -7,17 +7,17 @@ const { sign } = require("jsonwebtoken");
 class SessionsController {
   async create(request, response) {
     const { email, password } = request.body;
-
+       
     const user = await knex("users").where({ email }).first();
 
     if (!user) {
-      throw new AppError("E-mail e/ou senha incorreta", 401);
+      return response.status(401).json({message:"E-mail e/ou senha incorreta"});
     }
 
     const passwordMatched = await compare(password, user.password);
 
     if (!passwordMatched) {
-      throw new AppError("E-mail e/ou senha incorreta", 401);
+      return response.status(401).json({message:"E-mail e/ou senha incorreta"});
     }
 
     const { secret, expiresIn } = authConfig.jwt;
@@ -28,6 +28,8 @@ class SessionsController {
 
     return response.json({ user, token });
   }
+
+  
 }
 
 module.exports = SessionsController;

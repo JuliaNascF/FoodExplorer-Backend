@@ -2,7 +2,7 @@ const { Router } = require('express');
 const multer = require('multer');
 const uploadConfig = require('../configs/multer');
 const UsersController = require("../controllers/UsersController");
-const { userSchema } = require("../schemas/auth.schemas.js");
+const  userSchema  = require("../schemas/auth.schemas.js");
 
 const usersController = new UsersController();
 const usersRoutes = Router();

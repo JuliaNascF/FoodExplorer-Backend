@@ -24,7 +24,7 @@ class CartController {
         return res.status(400).send("O prato já está no carrinho do usuário");
         
       } else {
-        // Adiciona o prato ao carrinho do usuário
+      
         await knex('orderItem').insert({ user_id: userId, dish_id: dishId, quantity});
       }
 
@@ -59,11 +59,11 @@ class CartController {
     const dishId = req.params.id;
 
     try {
-      // Verifica se o usuário existe
+    
       const user = await knex('users').where('id', userId).first();
       if (!user) return res.status(404).send("Usuário não encontrado");
 
-      // Verifica se o item do carrinho existe
+  
       const cartItem = await knex('orderItem')
         .where('user_id', userId)
         .where('dish_id', dishId)
@@ -72,13 +72,11 @@ class CartController {
       if (!cartItem) return res.status(404).send("Prato não encontrado no carrinho");
 
       if (cartItem.quantity <= 1) {
-        // Remove o item do carrinho se a quantidade for menor ou igual a 1
         await knex('orderItem')
           .where('user_id', userId)
           .where('dish_id', dishId)
           .del();
       } else {
-        // Decrementa a quantidade do item no carrinho
         await knex('orderItem')
           .where('user_id', userId)
           .where('dish_id', dishId)
@@ -96,11 +94,11 @@ class CartController {
     const dishId = req.params.id;
 
     try {
-      // Verifica se o usuário existe
+    
       const user = await knex('users').where('id', userId).first();
       if (!user) return res.status(404).send("Usuário não encontrado");
 
-      // Verifica se o item do carrinho existe
+ 
       const cartItem = await knex('orderItem')
         .where('user_id', userId)
         .where('dish_id', dishId)
@@ -108,7 +106,7 @@ class CartController {
 
       if (!cartItem) return res.status(404).send("Prato não encontrado no carrinho");
 
-      // Remove o item do carrinho
+    
       await knex('orderItem')
         .where('user_id', userId)
         .where('dish_id', dishId)
@@ -139,11 +137,11 @@ class CartController {
     const userId = req.user.id;
 
     try {
-      // Verifica se o usuário existe
+    
       const user = await knex('users').where('id', userId).first();
       if (!user) return res.status(404).send("Usuário não encontrado");
 
-      // Obtém todos os itens do carrinho do usuário com informações do prato (dish)
+     
       const cartItems = await knex('orderItem')
         .where('user_id', userId)
         .join('dishes', 'orderItem.dish_id', '=', 'dishes.id')

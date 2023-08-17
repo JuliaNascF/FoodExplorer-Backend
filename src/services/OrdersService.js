@@ -9,17 +9,14 @@ class OrdersService {
       throw new Error('Internal server error');
     }
   }
-
   async getAllOrders() {
     try {
-      
-        return ordersRepository.findAll();
+    return ordersRepository.findAll();
       
     } catch (error) {
       throw new Error('Internal server error');
     }
   }
-
   async getOrdersByUserId(userId, isAdmin) {
     try {
       if (isAdmin) {
@@ -31,7 +28,6 @@ class OrdersService {
       throw new Error('Internal server error');
     }
   }
-  
   async updateOrderStatus(orderId, orderStatus) {
     try {
       await ordersRepository.updateOrderStatus(orderId, orderStatus);
