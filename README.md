@@ -20,9 +20,8 @@ O usuário irá visualizar todos os pratos cadastrados e, quando clicar em um pr
 - Axios
 
 ## Configuração
-
+   Certifique-se de ter o Node.js e o npm (ou yarn) instalados em sua máquina.
 1. Clone este repositório para o seu computador:
-
 ```bash
 git clone https://github.com/JuliaNascF/FoodExplorer-Backend.git
 ```
@@ -30,6 +29,13 @@ git clone https://github.com/JuliaNascF/FoodExplorer-Backend.git
  ```bash
 cd FoodExplorer-Backend
 ```
-3. Crie um banco de dados no PostgreSQL
-4. Configure as variáveis de ambiente necessárias.
+3. Instale as dependências:
+ ```bash
+npm install
+```
+4. Inicie o servidor:
+ ```bash
+npm run dev
+```
+5. Configure as variáveis de ambiente necessárias.
 
