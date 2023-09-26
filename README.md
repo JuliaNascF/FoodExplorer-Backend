@@ -12,7 +12,6 @@ O usuário irá visualizar todos os pratos cadastrados e, quando clicar em um pr
 - Nodemon
 - Postgres
 - Knex
-- BCryptjs
 - JSON Web Token
 - Multer
 - AWS S3
